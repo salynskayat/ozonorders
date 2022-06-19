@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option go_package="github.com/salynskayat/ozonorders";
+
+package api;
+
+import "google/protobuf/timestamp.proto";
+
+message Item {
+  int64 ProductId = 1;
+  int32 Quantity = 2;
+  float price = 3;
+}
+
+message Customer {
+  int64 CustomerId = 1;
+}
+
+message Orders {
+  repeated Order items = 1;
+}
+
+message Order {
+  repeated Item items = 1;
+  int64 CustomerId = 2;
+  int64 PaymentMethodId = 3;
+  int64 DeliveryMethodId = 4;
+  string Operation = 5;
+  google.protobuf.Timestamp OperationDate = 6;
+  int64 Ts = 7;
+}
+
+message OrderResponse {
+  repeated Item items = 1;
+  int64 OrderId = 2;
+  int64 CustomerId = 3;
+  int64 PaymentMethodId = 4;
+  int64 DeliveryMethodId = 5;
+  string Operation = 6;
+  float Total = 7;
+}
+
+service OrderService {
+  rpc Interact(Order) returns(OrderResponse) {}
+}
+
+service OrdersService {
+  rpc GetOrders(Customer) returns(Orders) {}
+}
